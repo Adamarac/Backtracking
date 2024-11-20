@@ -87,6 +87,26 @@ void diminuiCaminho (struct grafo *G, int arestaAcrescentar) {
 }
 
 
+int melhorArestaFinal(struct grafo *G, int verticeAtual){
+
+	int peso = INT_MAX;
+	int arestaFinal = -1;
+	int j;
+	for (j = 0; j < G->M; j++) {
+		if ((G->A[3 * j] == verticeAtual && G->A[3 * j + 1] == verticeIni) ||
+        (G->A[3 * j + 1] == verticeAtual && G->A[3 * j] == verticeIni)) {
+
+			if(G->A[3 * j + 2] < peso){
+				peso = G->A[3 * j + 2];
+				arestaFinal = j;
+			}
+
+		}
+	}
+	return arestaFinal;
+}
+
+
 int backtracking(struct grafo *G, int nivel, int verticeAtual) {
 
 	//printf("Nova chamada");
@@ -94,12 +114,12 @@ int backtracking(struct grafo *G, int nivel, int verticeAtual) {
 	//printf(" Nivel: %d \n", nivel);
 
     if (nivel == G->N) {
-        for (int j = 0; j < G->M; j++) {
-            if ((G->A[3 * j] == verticeAtual && G->A[3 * j + 1] == verticeIni) ||
-                (G->A[3 * j + 1] == verticeAtual && G->A[3 * j] == verticeIni)) {
-				// Calcula peso do caminho
 
-				arestaUsada[j] = 1;
+		int fechaCiclo = melhorArestaFinal(G, verticeAtual);
+
+		if(fechaCiclo != -1){
+
+			arestaUsada[fechaCiclo] = 1;
 
                 int caminhoteste = 0;
                 for (int k = 0; k < G->M; k++) {
@@ -114,13 +134,13 @@ int backtracking(struct grafo *G, int nivel, int verticeAtual) {
 					}
 					//printf("\n");
 				}else{
-					arestaUsada[j] = 0;
+					arestaUsada[fechaCiclo] = 0;
 				}
 
                 return 1;
-            }
-        }
-        return 0; // Não há ciclo válido
+
+		}
+			return 0;
     }
 
     int encontrouSolucao = 0;
