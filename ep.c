@@ -151,27 +151,6 @@ int backtracking(struct grafo *G, int nivel, int verticeAtual) {
     return encontrouSolucao;
 }
 
-
-int guloso(struct grafo *G, int verticeAtual ) {
-  /* inicializa seleção de movimentos; */
-  int iAresta=0;
-  while ((iAresta<G->M)&&(!ehSolucao (G))) { 
-	/* x = seleciona (C) ; */
-	
-    if ( ehAceitavel (G, iAresta, verticeAtual) ) {  //if (viavel (S + x )) 
-		/* registra movimento; */ 
-		verticeAtual=aumentaCaminho (G, iAresta, verticeAtual);  //  S = S + x ;
-    }
-    iAresta++; // C = C − x;
-  } 
-  if (ehSolucao(G)) {
-	puts ("Achou solução");
-	return 1;
-  }
-  puts ("Não achou solução");
-  return 0;
-}
-
 int iniciaEexecuta(struct grafo *G, int verticeInicial) {
     grauDoVertice=calloc(G->N, sizeof(int)); // necessário inicializar com zeros;
     arestaUsada=calloc(G->M, sizeof(int));
